@@ -35,9 +35,9 @@ The files I uploaded are `final_gui.py`,`test_gui.py`,`test_autodetect.py` and a
   This file is mainly used to design the automatic wrinkle detection algorithm.
 
 - `final_gui.py`
-  This is the combination of the two file I mentioned above. You can select both modes under this GUI interface
+  This is the combination of the two file I mentioned above. You can select both modes under this GUI interface.
 
-## Algorithm introduce
+## Algorithm introduction
 
 Maybe you are curious about the algorithmic principle. Actually, I utilized traditional sobel edge detection as well as haar classifier for automatic wrinkle recognition. 
 
