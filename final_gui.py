@@ -89,6 +89,7 @@ class SmoothRegionApp:
         file_path = filedialog.askopenfilename()
         if file_path:
             self.image = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)  # Read the image in grayscale mode.
+            #cv2.imwrite("temp3.webp",self.image)
             self.image_temp = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
             self.display_image(self.image)
         self.smooth_executed = False
@@ -151,6 +152,7 @@ class SmoothRegionApp:
                 self.image_smoothed = detect_wrinkles(self.image,filter_parameter,0,filter_type)
             # Mark that "Smooth Region" has been executed once in 'Automatic' mode.
             self.smooth_executed = True
+        #cv2.imwrite('test1.webp',self.image_smoothed)
         self.display_image(self.image_smoothed)
 
     def update_parameter_entry(self, event):
@@ -200,6 +202,7 @@ class SmoothRegionApp:
                 self.display_image(self.image_smoothed)
             else:
                 self.display_image(self.image)  # Display the original image when there is no processed result.
+
          
 
 def detect_wrinkles(image, filter_parameter, order, filter_type):
@@ -246,11 +249,12 @@ def detect_wrinkles(image, filter_parameter, order, filter_type):
             # Draw the detected wrinkle areas on the original image
             for contour in contours:
                 x, y, w, h = cv2.boundingRect(contour)
-                # cv2.rectangle(face_roi, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                #cv2.rectangle(face_roi, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 # Apply Gaussian filtering to the wrinkle areas.
                 face_roi[y:y+h, x:x+w] = cv2.GaussianBlur(face_roi[y:y+h, x:x+w], (21, 21), 0)
             # 将处理后的人脸区域放回原图中
             gray[fy:fy+int(3*fh/5), fx+int(2*fw/11):fx+int(9*fw/11)] = face_roi
+            #cv2.imwrite('test1.webp', gray)
     else:
         # If no face is detected, perform wrinkle detection on the entire image area.
         # Draw a rectangular box to select the area and obtain the area for eye detection.
@@ -277,12 +281,14 @@ def detect_wrinkles(image, filter_parameter, order, filter_type):
         for contour in contours:
             x, y, w, h = cv2.boundingRect(contour)
             # Process the filter to the selected region
+            #cv2.rectangle(gray, (x, y), (x + w, y + h), (0, 255, 0), 2)
             if filter_type == "Ideal Low Pass":
                 gray[y:y+h, x:x+w] = ideal_low_pass_filter(gray[y:y+h, x:x+w], filter_parameter)
             elif filter_type == "Butterworth Low Pass":
                 gray[y:y+h, x:x+w] = Butterworth_low_pass_filter(gray[y:y+h, x:x+w], filter_parameter, order)
             elif filter_type == "Gaussian Low Pass":
                 gray[y:y+h, x:x+w] = Gaussian_low_pass_filter(gray[y:y+h, x:x+w], filter_parameter)
+            #cv2.imwrite('test2.webp', gray)
     return gray
 
 def ideal_low_pass_filter(img, d0):
